@@ -15,6 +15,7 @@ import com.company.designPattern.proxy.IBrowser;
 import com.company.designPattern.singleton.AClazz;
 import com.company.designPattern.singleton.BClazz;
 import com.company.designPattern.singleton.SocketClient;
+import com.company.designPattern.strategy.*;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -146,41 +147,77 @@ public class Main {
 //        button.click("메시지 전달 : click3");
 //        button.click("메시지 전달 : click4");
 
-        // 6. facade pattern
-        // : facade는 건물의 앞쪽 정면이라는 뜻을 가진다. 건물의 뒷쪽에는 뭐가 있는지 모른다.
-        // : 여러 개의 객체와 실제 사용하는 서브 객체의 사이에 복잡한 의존관계가 있을 때, 중간에 facade라는 객체를 두고, 여기서 제공하는 interface만을 활용하여 기능을 사용하는 방식이다.
-        // : facade는 자신이 가지고 있는 각 클래스의 기능을 명확히 알아야 한다.
-        // : facade는 어떠한 인터페이스를 제공하는지도 정확히 알아야한다.
-        // : 여러개의 객체를 합쳐서 특정한 기능을 만들 때 사용한다.
+//        // 6. facade pattern
+//        // : facade는 건물의 앞쪽 정면이라는 뜻을 가진다. 건물의 뒷쪽에는 뭐가 있는지 모른다.
+//        // : 여러 개의 객체와 실제 사용하는 서브 객체의 사이에 복잡한 의존관계가 있을 때, 중간에 facade라는 객체를 두고, 여기서 제공하는 interface만을 활용하여 기능을 사용하는 방식이다.
+//        // : facade는 자신이 가지고 있는 각 클래스의 기능을 명확히 알아야 한다.
+//        // : facade는 어떠한 인터페이스를 제공하는지도 정확히 알아야한다.
+//        // : 여러개의 객체를 합쳐서 특정한 기능을 만들 때 사용한다.
+//
+//        // - facade 적용 안된 것, 개별적으로 다 만들어서 코딩을 진행해야하는 상황이다. 클라이언트가 의존성을 가지고 다 만들고 있다.
+//        Ftp ftpClient = new Ftp("www.foo.co.kr",22,"/home/etc");
+//        ftpClient.connect();
+//        ftpClient.moveDirectory();
+//
+//        Writer writer = new Writer("text.tmp");
+//        writer.fileConnect();
+//        writer.write();
+//
+//        Reader reader = new Reader("text.tmp");
+//        reader.fileConnect();
+//        reader.fileRead();
+//
+//        reader.fileDisconnect();
+//        writer.fileDisconnect();
+//        ftpClient.disConnect();
+//
+//        System.out.println();
+//
+//        // - facade객체 만들어서 적용 한 것.
+//        // : facade pattern을 적용시키면 새로운 객체가 만들어지고,
+//        //   이 객체를 통해 안에 있는 복잡한 의존성을 가진 것들을 새로운 인터페이스 형태로 제공된다.
+//        SftpClient sftpClient = new SftpClient("www.foo.co.kr",22,"/home/etc","text.tmp");
+//        sftpClient.connect();
+//        sftpClient.write();
+//        sftpClient.read();
+//        sftpClient.disConnect();
 
-        // - facade 적용 안된 것, 개별적으로 다 만들어서 코딩을 진행해야하는 상황이다. 클라이언트가 의존성을 가지고 다 만들고 있다.
-        Ftp ftpClient = new Ftp("www.foo.co.kr",22,"/home/etc");
-        ftpClient.connect();
-        ftpClient.moveDirectory();
 
-        Writer writer = new Writer("text.tmp");
-        writer.fileConnect();
-        writer.write();
+        // 7. strategy pattern
+        // : 전략 패턴으로 불리며, 객체지향의 꽃이다.
+        // : 유사한 행위들을 캡슐화하여, 객체의 행위를 바꾸고 싶은 경우 직접 변경하는 것이 아닌 전략만 변경하여, 유연하게 확장하는 패턴.
+        // : SOLID중에서 개방폐쇄 원칙 (OCP)과 의존 역전 원칙(DIP)를 따른다.
+        // - 예제 설명
+        //   1) 전략 메서드를 가진 전략 객체 : Normal Strategy, Based64 Strategy, Append Strategy
+        //   2) 전략 객체를 사용하는 컨텍스트 : Encoder
+        //   3) 전략 객체를 생성해 컨텍스트에 주입하는 클라이언트 : Main method에 작성하였다.
 
-        Reader reader = new Reader("text.tmp");
-        reader.fileConnect();
-        reader.fileRead();
+        // 사용하기 위한 기본 객체 생성
+        Encoder encoder =  new Encoder();
 
-        reader.fileDisconnect();
-        writer.fileDisconnect();
-        ftpClient.disConnect();
+        // base64 전략 생성
+        EncodingStrategy base64 = new Base64Strategy();
 
-        System.out.println();
+        // normal 전략 생성
+        EncodingStrategy normal = new NormalStrategy();
 
-        // - facade객체 만들어서 적용 한 것.
-        // : facade pattern을 적용시키면 새로운 객체가 만들어지고,
-        //   이 객체를 통해 안에 있는 복잡한 의존성을 가진 것들을 새로운 인터페이스 형태로 제공된다.
-        SftpClient sftpClient = new SftpClient("www.foo.co.kr",22,"/home/etc","text.tmp");
-        sftpClient.connect();
-        sftpClient.write();
-        sftpClient.read();
-        sftpClient.disConnect();
+        // 메시지 만들기
+        String message = "hello java";
 
+        //  사용할 전략 세팅 : 여기서는 base64로 전략 세팅, 인코더(encoder) 객체 자체는 변하지 않는다.
+        encoder.setEncodingStrategy(base64);
+        String base64Result = encoder.getMessage(message);
+        System.out.println(base64Result);
+
+        //  사용할 전략 세팅 : 여기서는 normal로 전략 세팅, 인코더(encoder) 객체 자체는 변하지 않는다.
+        encoder.setEncodingStrategy(normal);
+        String normalResult = encoder.getMessage(message);
+        System.out.println(normalResult);
+
+        // AppendStrategy 전략을 추가해보았다.
+        encoder.setEncodingStrategy(new AppendStrategy());
+        String appendResult = encoder.getMessage(message);
+        System.out.println(appendResult);
     }
 
 //    // 2. adapter pattern
