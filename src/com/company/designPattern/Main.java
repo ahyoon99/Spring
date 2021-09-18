@@ -3,6 +3,8 @@ package com.company.designPattern;
 import com.company.designPattern.adapter.*;
 import com.company.designPattern.aop.AopBrowser;
 import com.company.designPattern.decorator.*;
+import com.company.designPattern.observer.Button;
+import com.company.designPattern.observer.IButtonListener;
 import com.company.designPattern.proxy.Browser;
 import com.company.designPattern.proxy.BrowserProxy;
 import com.company.designPattern.proxy.IBrowser;
@@ -102,26 +104,44 @@ public class Main {
 //        aopBrowser.show();  // 이 코드는 위의 코드와 출력결과가 다르다. loading time이 0초가 걸린다. cache 사용하기 때문에!
 //        System.out.println("loading time : "+end.get());
 
-        // 4. decorator pattern
-        // : 기존 뼈대(클래스)는 유지하되, 이후 필요한 형태로 꾸밀 때 사용한다.
-        // : 확장이 필요한 경우 상속의 대안으로도 활용한다.
-        // : SOLID중에서 개방폐쇄 원칙(OCP)과 의존 역전 원칙(DIP)를 따른다.
-        // ex) 커피원액 -> 아메리카노, 라떼 / 케이크 -> 초코케이크, 딸기케이크, 과일케이크
-        //     : 원본을 유지하되, 뭘 첨가하는지에 따라서 다른 형태로 확장되는 것이다.
-        ICar audi = new Audi(1000);
-        audi.showPrice();
+//        // 4. decorator pattern
+//        // : 기존 뼈대(클래스)는 유지하되, 이후 필요한 형태로 꾸밀 때 사용한다.
+//        // : 확장이 필요한 경우 상속의 대안으로도 활용한다.
+//        // : SOLID중에서 개방폐쇄 원칙(OCP)과 의존 역전 원칙(DIP)를 따른다.
+//        // ex) 커피원액 -> 아메리카노, 라떼 / 케이크 -> 초코케이크, 딸기케이크, 과일케이크
+//        //     : 원본을 유지하되, 뭘 첨가하는지에 따라서 다른 형태로 확장되는 것이다.
+//        ICar audi = new Audi(1000);
+//        audi.showPrice();
+//
+//        // a3
+//        ICar audi3 = new A3(audi, "A3");
+//        audi3.showPrice();
+//
+//        // a4
+//        ICar audi4 = new A4(audi, "A4");
+//        audi4.showPrice();
+//
+//        // a5
+//        ICar audi5 = new A5(audi, "A4");
+//        audi5.showPrice();
 
-        // a3
-        ICar audi3 = new A3(audi, "A3");
-        audi3.showPrice();
+        // 5. observer pattern (관찰자 패턴)
+        // : 변화가 일어났을 때, 미리 등록된 다른 클래스에 통보해주는 패턴을 구현한 것이다.
+        // : 많이 보이는 곳은 event listener에서 해당 패턴을 사용하고 있다. 특정한 event가 발생하면 listener를 통해 event가 전달된다.
+        Button button = new Button("버튼");
 
-        // a4
-        ICar audi4 = new A4(audi, "A4");
-        audi4.showPrice();
+        button.addListener(new IButtonListener() {  // 익명 클래스로 전달받아서 넣어보겠다.
+            @Override
+            public void clickEvent(String event) {
+                System.out.println(event);
+            }
+        });
 
-        // a5
-        ICar audi5 = new A5(audi, "A4");
-        audi5.showPrice();
+        button.click("메시지 전달 : click1");
+        button.click("메시지 전달 : click2");
+        button.click("메시지 전달 : click3");
+        button.click("메시지 전달 : click4");
+
     }
 
 //    // 2. adapter pattern
