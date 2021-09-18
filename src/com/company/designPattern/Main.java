@@ -3,6 +3,10 @@ package com.company.designPattern;
 import com.company.designPattern.adapter.*;
 import com.company.designPattern.aop.AopBrowser;
 import com.company.designPattern.decorator.*;
+import com.company.designPattern.facade.Ftp;
+import com.company.designPattern.facade.Reader;
+import com.company.designPattern.facade.SftpClient;
+import com.company.designPattern.facade.Writer;
 import com.company.designPattern.observer.Button;
 import com.company.designPattern.observer.IButtonListener;
 import com.company.designPattern.proxy.Browser;
@@ -125,22 +129,57 @@ public class Main {
 //        ICar audi5 = new A5(audi, "A4");
 //        audi5.showPrice();
 
-        // 5. observer pattern (관찰자 패턴)
-        // : 변화가 일어났을 때, 미리 등록된 다른 클래스에 통보해주는 패턴을 구현한 것이다.
-        // : 많이 보이는 곳은 event listener에서 해당 패턴을 사용하고 있다. 특정한 event가 발생하면 listener를 통해 event가 전달된다.
-        Button button = new Button("버튼");
+//        // 5. observer pattern (관찰자 패턴)
+//        // : 변화가 일어났을 때, 미리 등록된 다른 클래스에 통보해주는 패턴을 구현한 것이다.
+//        // : 많이 보이는 곳은 event listener에서 해당 패턴을 사용하고 있다. 특정한 event가 발생하면 listener를 통해 event가 전달된다.
+//        Button button = new Button("버튼");
+//
+//        button.addListener(new IButtonListener() {  // 익명 클래스로 전달받아서 넣어보겠다.
+//            @Override
+//            public void clickEvent(String event) {
+//                System.out.println(event);
+//            }
+//        });
+//
+//        button.click("메시지 전달 : click1");
+//        button.click("메시지 전달 : click2");
+//        button.click("메시지 전달 : click3");
+//        button.click("메시지 전달 : click4");
 
-        button.addListener(new IButtonListener() {  // 익명 클래스로 전달받아서 넣어보겠다.
-            @Override
-            public void clickEvent(String event) {
-                System.out.println(event);
-            }
-        });
+        // 6. facade pattern
+        // : facade는 건물의 앞쪽 정면이라는 뜻을 가진다. 건물의 뒷쪽에는 뭐가 있는지 모른다.
+        // : 여러 개의 객체와 실제 사용하는 서브 객체의 사이에 복잡한 의존관계가 있을 때, 중간에 facade라는 객체를 두고, 여기서 제공하는 interface만을 활용하여 기능을 사용하는 방식이다.
+        // : facade는 자신이 가지고 있는 각 클래스의 기능을 명확히 알아야 한다.
+        // : facade는 어떠한 인터페이스를 제공하는지도 정확히 알아야한다.
+        // : 여러개의 객체를 합쳐서 특정한 기능을 만들 때 사용한다.
 
-        button.click("메시지 전달 : click1");
-        button.click("메시지 전달 : click2");
-        button.click("메시지 전달 : click3");
-        button.click("메시지 전달 : click4");
+        // - facade 적용 안된 것, 개별적으로 다 만들어서 코딩을 진행해야하는 상황이다. 클라이언트가 의존성을 가지고 다 만들고 있다.
+        Ftp ftpClient = new Ftp("www.foo.co.kr",22,"/home/etc");
+        ftpClient.connect();
+        ftpClient.moveDirectory();
+
+        Writer writer = new Writer("text.tmp");
+        writer.fileConnect();
+        writer.write();
+
+        Reader reader = new Reader("text.tmp");
+        reader.fileConnect();
+        reader.fileRead();
+
+        reader.fileDisconnect();
+        writer.fileDisconnect();
+        ftpClient.disConnect();
+
+        System.out.println();
+
+        // - facade객체 만들어서 적용 한 것.
+        // : facade pattern을 적용시키면 새로운 객체가 만들어지고,
+        //   이 객체를 통해 안에 있는 복잡한 의존성을 가진 것들을 새로운 인터페이스 형태로 제공된다.
+        SftpClient sftpClient = new SftpClient("www.foo.co.kr",22,"/home/etc","text.tmp");
+        sftpClient.connect();
+        sftpClient.write();
+        sftpClient.read();
+        sftpClient.disConnect();
 
     }
 
