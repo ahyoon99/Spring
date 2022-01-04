@@ -117,4 +117,12 @@ public class ApiController {
         return requestDto;
     }
 
+    // <DELETE method 만드는 방법>
+    // 1) DeleteMapping을 통해 주소 할당
+    @DeleteMapping("/delete/{userId}")
+    public void delete(@PathVariable String userId, @RequestParam String account){
+        // 아직 서비스 로직이 없기 때문에 일단 출력만 하겠다.
+        System.out.println(userId);
+        System.out.println(account);
+    }
 }
