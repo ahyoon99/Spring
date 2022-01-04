@@ -84,4 +84,21 @@ public class ApiController {
 
         return userRequest.toString();
     }
+
+    // <POST method 만드는 방법>
+    // 1) PostMapping을 통해 주소 할당
+    @PostMapping("/post")
+    public void post(@RequestBody Map<String, Object> requestData){
+        requestData.entrySet().forEach(stringObjectEntry -> {
+            System.out.println("key : "+stringObjectEntry.getKey());
+            System.out.println("value : "+stringObjectEntry.getValue());
+        });
+    }
+
+    // 2) QueryParameter
+    @PostMapping("/post/query-param")
+    public void postqueryParam(@RequestBody Map<String, Object> requestData){
+        System.out.println(requestData);
+    }
+
 }
