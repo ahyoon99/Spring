@@ -1,5 +1,6 @@
 package com.example.hellospringboot.controller;
 
+import com.example.hellospringboot.dto.PutRequestDto;
 import com.example.hellospringboot.dto.UserRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,10 +96,25 @@ public class ApiController {
         });
     }
 
-    // 2) QueryParameter
+    // 2)
     @PostMapping("/post/query-param")
     public void postqueryParam(@RequestBody Map<String, Object> requestData){
         System.out.println(requestData);
+    }
+
+    // <PUT method 만드는 방법>
+    // 1) PutMapping을 통해 주소 할당
+    @PutMapping("/put")
+    public PutRequestDto put(@RequestBody PutRequestDto requestDto){
+        System.out.println(requestDto);
+        return requestDto;
+    }
+
+    // 2) PathVariable
+    @PutMapping("/put/{userId}")
+    public PutRequestDto PathVariablePut(@RequestBody PutRequestDto requestDto, @PathVariable(name = "userId") Long id){
+        System.out.println(id);
+        return requestDto;
     }
 
 }
