@@ -1,7 +1,10 @@
 package com.example.hellospringboot.controller;
 
 import com.example.hellospringboot.dto.PutRequestDto;
+import com.example.hellospringboot.dto.User;
 import com.example.hellospringboot.dto.UserRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -124,5 +127,30 @@ public class ApiController {
         // 아직 서비스 로직이 없기 때문에 일단 출력만 하겠다.
         System.out.println(userId);
         System.out.println(account);
+    }
+
+    // <Response 내려주는 방법>
+    // 1) text를 response로 내려준다.
+    @GetMapping("text")
+    public String text(@RequestParam String account){
+        return account;
+    }
+
+    // 2) json을 response로 내려준다.
+    // -1. request가 오면 object mapper를 통해 object로 바뀐다.
+    // -2. 그리고 method를 수행한다.
+    // -3. method를 다 수행하고 response로 object를 던진다.
+    // -4. 이 object는 object mapper를 통해 json으로 바뀌어 response가 내려간다.
+    @PostMapping("/json")
+    public User json(@RequestBody User user){
+        return user;    // 200 ok
+    }
+
+    // 3) response를 내려줄때 http status를 정해서 내려주겠다.
+    //      -> 가장 명확하게 응답을 내려줄 수 있는 방법!
+    //      : responseEntity라는 객체를 통해서 내려줘야한다.
+    @PutMapping("/putResponse")
+    public ResponseEntity<User> putResponse(@RequestBody User user){
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }
