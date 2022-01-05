@@ -29,7 +29,15 @@ public class Main {
 
         // 인터페이스 하나가 생겼지만 나의 코드는 그다지 변하지 않았다.
         // 3) Encoder 생성하여 코드 줄이기 : Encoder를 건들여서 동작한다.
-        Encoder encoder = new Encoder();
+//        Encoder encoder = new Encoder();
+//        String result = encoder.encode(url);
+//        System.out.println(result);
+
+        // +) DI를 넣어보겠다.
+        // 4) DI 적용한 코드 : Encoder를 건들이지 않고도 동작가능하다.
+        // DI : 외부에서 사용하는 객체를 주입받는 것이다.
+        //Encoder encoder = new Encoder(new Base64Encoder());
+        Encoder encoder = new Encoder(new UrlEncoder());
         String result = encoder.encode(url);
         System.out.println(result);
 
