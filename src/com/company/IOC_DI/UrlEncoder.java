@@ -3,7 +3,7 @@ package com.company.IOC_DI;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class UrlEncoder{
+public class UrlEncoder implements IEncoder{
 
     public String encode(String message){
         try {

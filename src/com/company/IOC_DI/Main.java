@@ -7,16 +7,25 @@ public class Main {
 
         // 1) 아무 기법사용 안한 코드
         // 요구사항1) Base 64로 encoding 해주세요
-        Base64Encoder encoder = new Base64Encoder();
+//        Base64Encoder encoder = new Base64Encoder();
+//        String result = encoder.encode(url);
+//        System.out.println(result);
+//
+//        // 요구사항2) url encoding도 해주세요
+//        UrlEncoder urlEncoder = new UrlEncoder();
+//        String urlResult = urlEncoder.encode(url);
+//        System.out.println(urlResult);
+
+        // 요구사항이 늘어날 수록 Encoder를 하나씩 새로 만들어야한다.
+        // +) 추상화를 적용 시켜보겠다.
+        // 2) interface 생성 한 후의 코드
+        IEncoder encoder = new Base64Encoder();
         String result = encoder.encode(url);
         System.out.println(result);
 
-        // 요구사항2) url encoding도 해주세요
-        UrlEncoder urlEncoder = new UrlEncoder();
+        IEncoder urlEncoder = new UrlEncoder();
         String urlResult = urlEncoder.encode(url);
         System.out.println(urlResult);
-
-        // 요구사항이 늘어날 수록 Encoder를 하나씩 새로 만들어야한다.
 
     }
 }
