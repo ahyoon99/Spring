@@ -19,13 +19,19 @@ public class Main {
         // 요구사항이 늘어날 수록 Encoder를 하나씩 새로 만들어야한다.
         // +) 추상화를 적용 시켜보겠다.
         // 2) interface 생성 한 후의 코드
-        IEncoder encoder = new Base64Encoder();
+//        IEncoder encoder = new Base64Encoder();
+//        String result = encoder.encode(url);
+//        System.out.println(result);
+//
+//        IEncoder urlEncoder = new UrlEncoder();
+//        String urlResult = urlEncoder.encode(url);
+//        System.out.println(urlResult);
+
+        // 인터페이스 하나가 생겼지만 나의 코드는 그다지 변하지 않았다.
+        // 3) Encoder 생성하여 코드 줄이기 : Encoder를 건들여서 동작한다.
+        Encoder encoder = new Encoder();
         String result = encoder.encode(url);
         System.out.println(result);
-
-        IEncoder urlEncoder = new UrlEncoder();
-        String urlResult = urlEncoder.encode(url);
-        System.out.println(urlResult);
 
     }
 }
