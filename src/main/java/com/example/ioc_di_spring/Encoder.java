@@ -19,6 +19,10 @@ public class Encoder {
         this.iEncoder=iEncoder;
     }
 
+    public void setIEncoder(IEncoder iEncoder) {
+        this.iEncoder = iEncoder;
+    }
+
     public String encode(String message){
         return iEncoder.encode(message);
     }
