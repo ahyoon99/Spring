@@ -8,16 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class ApiController {
 
     @PostMapping("/user")
-    public ResponseEntity user(@RequestBody User user){
+    public User user(@Valid @RequestBody User user){
         System.out.println(user);
-        if (user.getAge()>=90){ // age가 90이상이면 에러를 던져준다.
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(user);
-        }
-        return ResponseEntity.ok(user);
+        return user;
+//        if (user.getAge()>=90){ // age가 90이상이면 에러를 던져준다.
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(user);
+//        }
+//        return ResponseEntity.ok(user);
     }
 }
