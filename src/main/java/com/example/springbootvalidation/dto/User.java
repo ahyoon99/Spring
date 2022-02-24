@@ -10,14 +10,14 @@ import java.util.List;
 
 public class User {
 
-    @NotBlank
+    @NotEmpty
+    @Size(min = 1, max= 10)
     private String name;
 
     @Max(value = 90)
-    private int age;
-
-    @Valid  // 꼭 @Valid 써주어야 Car 안에도 점검해준다.
-    private List<Car> cars;
+    @Min(1)
+    @NotNull
+    private Integer age;
 
     public String getName() {
         return name;
@@ -35,20 +35,11 @@ public class User {
         this.age = age;
     }
 
-    public List<Car> getCars() {
-        return cars;
-    }
-
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
-                ", cars=" + cars +
                 '}';
     }
 }
