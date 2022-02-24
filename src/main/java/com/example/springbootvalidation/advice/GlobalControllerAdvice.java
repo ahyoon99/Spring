@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+//@RestControllerAdvice(basePackages = "com.example.exception.controller") // 해당 패키지 아래에 있는 exception을 처리할 수 있게 된다.
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
@@ -23,7 +24,7 @@ public class GlobalControllerAdvice {
     // 특정 method의 exception을 잡고 싶을 때
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e){
-
+        System.out.println("Global Exception");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 

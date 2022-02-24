@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,5 +56,12 @@ public class ApiController {
         // logic
 
         return ResponseEntity.ok(user);
+    }
+
+    // 이 controller 안에서만 예외처리를 해준다. Global exception보다 우선순위 높다.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e){
+        System.out.println("Api Controller Exception");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }
