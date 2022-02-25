@@ -5,23 +5,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/api/user")
+@Validated
 public class ApiController {
 
     @GetMapping("")
-    public User get(@RequestParam(required = false) String name, @RequestParam(required = false) Integer age){  // required = false는 값이 없어도 에러가 나지 않도록 한다.
+    public User get(
+            @Size(min=2)
+            @RequestParam String name,
+
+            @NotNull
+            @Min(1)
+            @RequestParam Integer age){  // required = false는 값이 없어도 에러가 나지 않도록 한다.
         User user = new User();
         user.setName(name);
         user.setAge(age);
-
-        // 예외 발생시키기
-        int a = 10 + age;    // NullPointerException 발생
 
         return user;
     }
@@ -58,10 +66,10 @@ public class ApiController {
         return ResponseEntity.ok(user);
     }
 
-    // 이 controller 안에서만 예외처리를 해준다. Global exception보다 우선순위 높다.
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e){
-        System.out.println("Api Controller Exception");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
+//    // 이 controller 안에서만 예외처리를 해준다. Global exception보다 우선순위 높다.
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e){
+//        System.out.println("Api Controller Exception");
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//    }
 }
