@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class PrivateController {    // 내부 사용자, 세션이 인증 된 사용자만 넘길 것 이다.
 
+    //@Auth   // 특정 controller에 특정 method에만 달아줄 수 있다. 일관성이 떨어지고 유지보수하기 어려워진다.
     @GetMapping("/hello")
     public String hello(){
         log.info("private hello controller");
