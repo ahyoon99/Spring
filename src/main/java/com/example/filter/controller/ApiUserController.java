@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j  // 기본적으로 SpringBoot에서 logging을 남길 때에는 System.out.println()대신 log를 사용한다.
 @RestController
-@RequestMapping("/api/user")
-public class ApiController {
+@RequestMapping("/api/temp")
+public class ApiUserController {
 
     @PostMapping("")
     public User user(@RequestBody User user){
-        log.info("User : {}",user);
+        log.info("Temp : {}",user);
         return user;
     }
 }
