@@ -6,13 +6,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Slf4j
 @Service
 public class AsyncService {
 
-    @Async
+    @Async("async-thread")  // @Async 어노테이션은 public 메소드에만 넣어줄 수 있다.
     public CompletableFuture run(){
         // 반환형이 CompletableFuture일때 Completable을 별도의 쓰레드에서 실행시켜준다.
         return new AsyncResult(hello()).completable();
