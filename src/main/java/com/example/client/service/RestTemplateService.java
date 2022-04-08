@@ -15,9 +15,13 @@ public class RestTemplateService {
     // 에 요청을 해서 response를 받아올 것이다.
     public UserResponse hello() {
         // 우선 주소를 만들어보겠다. 주소를 만드는데 많이 사용하는 것이 uri component builder라는 것이 있다.
+        // get 주소를 만들때 query parameter가 들어가야할때는 queryParam을 사용하여 만들어주면 된다.
+        // queryParam 사용했을 때의 주소 : http://localhost:9090/api/server/hello?name=steve&age=10
         URI uri = UriComponentsBuilder
                 .fromUriString("http://localhost:9090")
                 .path("/api/server/hello")
+                .queryParam("name","aaaa")
+                .queryParam("age",99)
                 .encode()   // 원래는 encode 안해도 되지만, 만약 파라미터가 붙을 때에는 안정적으로 url encoding을 해서 보내야하기 때문에 encode를 해주겠다.
                 .build()
                 .toUri();
