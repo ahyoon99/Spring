@@ -13,7 +13,7 @@ public class RestTemplateService {
 
     // http://localhost/api/server/hello
     // 에 요청을 해서 response를 받아올 것이다.
-    public String hello() {
+    public UserResponse hello() {
         // 우선 주소를 만들어보겠다. 주소를 만드는데 많이 사용하는 것이 uri component builder라는 것이 있다.
         URI uri = UriComponentsBuilder
                 .fromUriString("http://localhost:9090")
@@ -33,11 +33,20 @@ public class RestTemplateService {
 //        return result;
 
         //  2. getForEntity 사용 : ResponseEntity<T> 타입이 리턴된다.
-        ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);   // result에 여러가지 정보가 담겨있다.
-        System.out.println(result.getStatusCode()); // http의 status code를 볼 수 있다. // 200 OK 가 출려된다.
-        System.out.println(result.getBody());   // response에 들어있는 내용이 들어있다. // hello server 가 출력된다.
+//        ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);   // result에 여러가지 정보가 담겨있다.
+//        System.out.println(result.getStatusCode()); // http의 status code를 볼 수 있다. // 200 OK 가 출려된다.
+//        System.out.println(result.getBody());   // response에 들어있는 내용이 들어있다. // hello server 가 출력된다.
+//
+//        return result.getBody();
 
-        return result.getBody();
+        // 3. json 형식으로 response 받기
+        // header내용 등 상세한 내용을 알기위해서는 getForEntity를 사용하는 것이 좋다.
+        ResponseEntity<UserResponse> result = restTemplate.getForEntity(uri, UserResponse.class);
+        System.out.println(result.getStatusCode());
+        System.out.println(result.getBody());
+
+        return result.getBody();    // result.getBody() 안에는 UserResponse가 들어있다. -> return값 UserResponse로 바꿔주기
+
     }
 }
 
