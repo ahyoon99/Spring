@@ -1,8 +1,10 @@
 package com.example.client.service;
 
+import com.example.client.dto.UserRequest;
 import com.example.client.dto.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -50,6 +52,40 @@ public class RestTemplateService {
         System.out.println(result.getBody());
 
         return result.getBody();    // result.getBody() 안에는 UserResponse가 들어있다. -> return값 UserResponse로 바꿔주기
+
+    }
+
+    public UserResponse post(){
+        // http://localhost:9090/api/server/user/{userId}/name/{userName}
+
+        // 1, 주소 만들기
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://localhost:9090")
+                .path("/api/server/user/{userId}/name/{userName}")
+                .encode()
+                .build()
+                .expand( 100, "steve")  // 순서대로 pathVariable에 매칭이 된다.
+                .toUri();
+        System.out.println(uri);
+
+        // 2. 내가 보내고 싶은 데이터를 object로 만들기
+        // 지금 POST 작업을 하고 있기 때문에 내가 보내고 싶은 데이터에는 http body가 있어야한다.
+        // 그런데 우리는 그냥 object를 보낼 것이다.
+        // 그러면 object mapper가 알아서 json으로 바꿔서 restTemplate에서 http body에 json으로 넣어줄 것이다.
+        UserRequest req = new UserRequest();
+        req.setName("steve");
+        req.setAge(10);
+
+        // 3. 응답을 뭘로 받을지 지정해주기
+        // 이제 restTemplate으로 쏘기만 하면 된다.
+        // 하지만 우리는 responseEntity<UserResponse>로 받을 것이다.
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserResponse> response = restTemplate.postForEntity(uri,req,UserResponse.class); // uri에 req를 보낼 것이고, UserResponse.class 타입으로 리턴받을 것이다.를 의미한다.
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getHeaders());
+        System.out.println(response.getBody());
+
+        return response.getBody();
 
     }
 }
