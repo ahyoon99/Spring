@@ -1,7 +1,9 @@
 package com.example.server.controller;
 
+import com.example.server.dto.Req;
 import com.example.server.dto.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -18,8 +20,22 @@ public class ServerApiController {
         return user;
     }
 
+    // RestTemplate - POST , Header에 정보 담아서 보내기
+//    @PostMapping("/user/{userId}/name/{userName}")
+//    public User post(@RequestBody User user,
+//                     @PathVariable int userId,
+//                     @PathVariable String userName,
+//                     @RequestHeader("x-authorization") String authorization,
+//                     @RequestHeader("custom-header") String customHeader){
+//
+//        log.info("userId : {}, userName : {}", userId, userName);
+//        log.info("authorization : {}, customHeader : {}", authorization, customHeader);
+//        log.info("client req : {}", user);
+//        return user;
+//    }
+
     @PostMapping("/user/{userId}/name/{userName}")
-    public User post(@RequestBody User user,
+    public Req<User> post(@RequestBody Req<User> user,
                      @PathVariable int userId,
                      @PathVariable String userName,
                      @RequestHeader("x-authorization") String authorization,
@@ -28,6 +44,13 @@ public class ServerApiController {
         log.info("userId : {}, userName : {}", userId, userName);
         log.info("authorization : {}, customHeader : {}", authorization, customHeader);
         log.info("client req : {}", user);
-        return user;
+
+        Req<User> response = new Req<>();
+        response.setHeader(
+                new Req.Header()
+        );
+        response.setResBody(user.getResBody());
+
+        return response;
     }
 }
