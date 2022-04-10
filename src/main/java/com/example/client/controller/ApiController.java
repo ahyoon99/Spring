@@ -21,7 +21,13 @@ public class ApiController {
 
     @GetMapping("/hello")
     public UserResponse getHello(){
+        // 1. get 예제
         //return restTemplateService.hello();
-        return restTemplateService.post();
+
+        // 2. post 예제
+        // return restTemplateService.post();
+
+        // 3. post 예제 - header에 정보 담아서 보내기
+        return restTemplateService.exchange();
     }
 }
