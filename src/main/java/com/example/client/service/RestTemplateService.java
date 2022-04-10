@@ -1,12 +1,13 @@
 package com.example.client.service;
 
+import com.example.client.dto.Req;
 import com.example.client.dto.UserRequest;
 import com.example.client.dto.UserResponse;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -124,6 +125,55 @@ public class RestTemplateService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<UserResponse> response = restTemplate.exchange(requestEntity, UserResponse.class);
         return response.getBody();
+    }
+
+    public Req<UserResponse> genericExchange(){
+        // 1. 주소 만들기
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://localhost:9090")
+                .path("/api/server/user/{userId}/name/{userName}")
+                .encode()
+                .build()
+                .expand( 100, "steve")  // 순서대로 pathVariable에 매칭이 된다.
+                .toUri();
+        System.out.println(uri);
+
+        // 2. 내가 보내고 싶은 데이터를 object로 만들기
+        // 지금 POST 작업을 하고 있기 때문에 내가 보내고 싶은 데이터에는 http body가 있어야한다.
+        // 그런데 우리는 그냥 object를 보낼 것이다.
+        // 그러면 object mapper가 알아서 json으로 바꿔서 restTemplate에서 http body에 json으로 넣어줄 것이다.
+
+        // body에 userRequest가 들어갈 것이다.
+        UserRequest userRequest = new UserRequest();
+        userRequest.setName("steve");
+        userRequest.setAge(10);
+
+        Req<UserRequest> req = new Req<>();
+        req.setHeader(
+            new Req.Header()
+        );
+        req.setResBody(
+            userRequest
+        );
+
+        // 요청으로 보낼 RequestEntity 만들기
+        RequestEntity<Req<UserRequest>> requestEntity = RequestEntity
+                .post(uri)  // post로 보낼 것이다.
+                .contentType(MediaType.APPLICATION_JSON)    // contentType 지정해주기
+                .header("x-authorization","abcd")   // header에 추가할 값
+                .header("custom-header","ffff")
+                .body(req);     // request body json에 들어갈 거(여기서는 req)를 넣어주면 된다.
+
+        // 3. 응답을 뭘로 받을지 지정해주기
+        // 이제 restTemplate으로 쏘기만 하면 된다.
+        // 하지만 우리는 responseEntity<UserResponse>로 받을 것이다.
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Req<UserResponse>> response = restTemplate.exchange(requestEntity, new ParameterizedTypeReference<Req<UserResponse>>(){});
+        // generic에는 .class를 붙일 수가 없다. 그래서 generic을 대응하기 위해서 rest Template에서 사용하는 것이 있다. 그게 바로 parameterized type reference이다.
+        // return response.getBody().getResBody();    // 첫번째 getBody() : responseEntity의 body를 리턴한다. 즉, Req<UserResponse>를 리턴해준다.
+                                                   // 두번째 getResBody() : Req의 rbody(우리가 지정해놓은 body)가 리턴된다.
+        return response.getBody();
+
     }
 }
 
