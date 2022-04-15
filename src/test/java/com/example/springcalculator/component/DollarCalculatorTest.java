@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-@SpringBootTest // 모든 빈이 등록이 된다.
+@SpringBootTest // 모든 빈이 등록이 된다. 그래서 자원소비가 더 많다.
 public class DollarCalculatorTest {
 
     @MockBean
